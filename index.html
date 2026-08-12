@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width,
+                 initial-scale=1.0,
+                 maximum-scale=1.0,
+                 user-scalable=no"
+    >
+
+    <title>YouTube Watch Player</title>
+
+    <style>
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+
+            width: 100%;
+            min-height: 100%;
+
+            background: #000;
+            color: #fff;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: flex-start;
+        }
+
+
+        #playerContainer {
+
+            width: 200px;
+            height: 200px;
+
+            margin-top: 4px;
+
+            overflow: hidden;
+
+            border-radius: 12px;
+
+            background: #111;
+        }
+
+
+        #player {
+
+            width: 200px;
+            height: 200px;
+        }
+
+
+        #status {
+
+            font-size: 12px;
+
+            margin-top: 8px;
+
+            text-align: center;
+
+            opacity: 0.8;
+        }
+
+
+        button {
+
+            margin-top: 8px;
+
+            padding: 10px 14px;
+
+            border: none;
+
+            border-radius: 20px;
+
+            font-size: 14px;
+
+            background: white;
+
+            color: black;
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <div id="playerContainer">
+
+        <div id="player"></div>
+
+    </div>
+
+
+    <div id="status">
+        YouTube Player
+    </div>
+
+
+    <button onclick="playVideo()">
+        ▶ 再生
+    </button>
+
+
+    <script>
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const videoId =
+            params.get("v")
+            || "M7lc1UVf-VE";
+
+
+        const tag =
+            document.createElement(
+                "script"
+            );
+
+
+        tag.src =
+            "https://www.youtube.com/iframe_api";
+
+
+        const firstScriptTag =
+            document.getElementsByTagName(
+                "script"
+            )[0];
+
+
+        firstScriptTag.parentNode.insertBefore(
+            tag,
+            firstScriptTag
+        );
+
+
+        let player;
+
+
+        function onYouTubeIframeAPIReady() {
+
+            player =
+                new YT.Player(
+                    "player",
+                    {
+
+                        width: 200,
+
+                        height: 200,
+
+                        videoId:
+                            videoId,
+
+                        playerVars: {
+
+                            playsinline: 1,
+
+                            controls: 1,
+
+                            autoplay: 0,
+
+                            rel: 0
+
+                        },
+
+                        events: {
+
+                            onReady:
+                                onPlayerReady,
+
+                            onError:
+                                onPlayerError
+
+                        }
+
+                    }
+                );
+        }
+
+
+        function onPlayerReady() {
+
+            document.getElementById(
+                "status"
+            ).textContent =
+                "準備完了";
+        }
+
+
+        function onPlayerError(event) {
+
+            document.getElementById(
+                "status"
+            ).textContent =
+                "YouTube Error: "
+                + event.data;
+        }
+
+
+        function playVideo() {
+
+            if (player) {
+
+                player.playVideo();
+
+            }
+        }
+
+    </script>
+
+</body>
+</html>
